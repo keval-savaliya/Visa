@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="selected_view_project_wizard_tree" model="ir.ui.view">
+        <field name="name">selected.record.project</field>
+        <field name="model">selected.report.project</field>
+        <field name="arch" type="xml">
+            <form string="project">
+                <sheet>
+                    <notebook>
+                        <page string="Project List">
+                            <field name="project_ids" mode="tree,kanban" on_change="1">
+                                <tree editable="bottom">
+                                    <field name="active" modifiers="{&quot;column_invisible&quot;: true}"/>
+                                    <field name="is_favorite" nolabel="1" width="1" widget="boolean_favorite"/>
+                                    <field name="display_name" string="Name" class="fw-bold"
+                                           modifiers="{&quot;readonly&quot;: true}"/>
+                                    <field name="partner_id" optional="hide" string="Customer" on_change="1"
+                                           can_create="true" can_write="true"/>
+                                    <field name="privacy_visibility" optional="hide"
+                                           modifiers="{&quot;required&quot;: true}"/>
+                                    <field name="sequence" column_invisible="True" field_id="sequence_0"/>
+                                    <field name="name" column_invisible="1" on_change="1" field_id="name_0"/>
+                                    <field name="message_needaction" column_invisible="True"
+                                           field_id="message_needaction_0"/>
+                                    <field name="active" column_invisible="True" field_id="active_0"/>
+                                    <field name="is_favorite" string="Favorite" nolabel="1" widget="boolean_favorite"
+                                           optional="hide" field_id="is_favorite_0"/>
+                                    <field name="display_name" string="Name" class="fw-bold" field_id="display_name_0"/>
+                                    <field name="partner_id" optional="show" string="Customer"
+                                           context="{'res_partner_search_mode': 'customer'}"
+                                           on_change="1" can_create="True"
+                                           can_write="True" field_id="partner_id_0"/>
+
+                                    <field name="company_id" column_invisible="True" on_change="1" can_create="True"
+                                           can_write="True" field_id="company_id_0"/>
+                                    <field name="date_start" string="Planned Date" widget="daterange"
+                                           options="{'end_date_field': 'date', 'always_range': '1'}" optional="hide"
+                                           on_change="1" field_id="date_start_0"/>
+                                    <field name="date" column_invisible="True" on_change="1" field_id="date_0"/>
+                                    <field name="user_id" optional="show" string="Project Manager"
+                                           widget="many2one_avatar_user"
+                                           options="{'no_open':True, 'no_create': True, 'no_create_edit': True}"
+                                           can_create="True" can_write="True" field_id="user_id_0"/>
+                                    <field name="last_update_color" column_invisible="True"
+                                           field_id="last_update_color_0"/>
+                                     <field name="last_update_status" string="Status" nolabel="1" optional="show"
+                                           widget="project_state_selection" on_change="1"
+                                           field_id="last_update_status_0"/>
+                                    <button string="View Tasks" name="action_view_tasks" type="object"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="selected_view_project_wizard_action" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">selected.report.project</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="selected_view_project_wizard_tree"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

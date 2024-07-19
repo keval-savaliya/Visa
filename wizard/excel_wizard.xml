@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+		<record id="excel_wizard_form" model="ir.ui.view">
+			<field name="name">excel.wizard.form</field>
+			<field name="model">excel.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Create Excel">
+					<group>
+				        <field name="title" />
+				        <field name="f2" />
+				        <field name="document_id" />
+				    </group>
+				    <notebook>
+	                    <page string="Client">
+	                    	<field name="detail_ids" widget="section_and_note_one2many" mode="tree,kanban" on_change="1"> 
+	                    		<tree editable="bottom">
+									<field name="fname"/>
+									<field name="dob"/>
+									<field name="age"/>
+									<field name="gender"/>
+									<field name="married_status"/>
+									<field name="country"/>
+									<field name="confirm"/>
+								</tree>
+	                    	</field>
+	                    </page>
+		            </notebook>
+				    <footer>
+					    <button string="Cancel" class="btn-secondary" special="cancel"/> 
+						<button name="create_excel" string="Excel File" type="object" class="btn-primary"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		 <record id="excel_wizard_action" model="ir.actions.act_window">
+            <field name="name">Excel</field>
+            <field name="type">ir.actions.act_window</field>  
+            <field name="res_model">excel.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="excel_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+        
+</odoo>

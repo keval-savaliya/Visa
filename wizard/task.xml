@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+		<record id="task_wizard_form" model="ir.ui.view">
+			<field name="name">task.wizard.form</field>
+			<field name="model">task.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Task">
+					<group>
+				        <field name="name_id" />
+				    </group>
+				    <notebook>
+		                <page string="Details">
+		                 	<field name="detail_ids" widget="section_and_note_one2many" mode="tree,kanban" on_change="1"> 
+		                   		<tree>
+									<field name="fname"/>
+									<field name="lname"/>
+									<field name="dob"/>
+									<field name="age"/>
+									<field name="email"/>
+									<field name="country"/>
+								</tree>
+		                   	</field>
+		                </page>
+		            </notebook>
+				    <footer>
+					    <button string="Cancel" class="btn-secondary" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		 <record id="task_wizard_action" model="ir.actions.act_window">
+            <field name="name">Task</field>
+            <field name="type">ir.actions.act_window</field>  
+            <field name="res_model">task.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="task_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+</odoo>

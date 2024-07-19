@@ -1,0 +1,138 @@
+<odoo>
+
+	<!-- form for visa type -->
+
+	<record id="visa_type_form" model="ir.ui.view">
+		<field name="name">visa.type.form</field>
+		<field name="model">visa.type</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					
+					<div class="oe_button_box" name="button_box">
+	                    <button class="oe_stat_button" type="object" name="get_travel" icon="fa-plane" > <!--attrs="{'invisible':[('name','in',('Tourist','Business'))]}"-->
+	                        <field string="Applications" name="travel_count" widget="statinfo" />
+	                    </button>
+	                    <button class="oe_stat_button" type="object" name="get_tourist" icon="fa-car" > <!--attrs="{'invisible':[('name','in',('Travel','Business'))]}"-->
+	                        <field string="Applications" name="tourist_count" widget="statinfo"/>
+	                    </button>
+	                    <button class="oe_stat_button" type="object" name="get_business" icon="fa-suitcase" ><!--attrs="{'invisible':[('name','in',('Tourist','Travel'))]}"-->
+	                        <field string="Applications" name="business_count" widget="statinfo"/>
+	                    </button>
+	                    <button name="%(task_wizard_action)d" string="Find Application" class="oe_stat_button" type="action" icon="fa-search"/>
+                	</div>
+                	 <div>
+	                	<field name="bgimage" widget="image" class="oe_avatar m-0"/>
+	                </div>
+					<div class="oe_title">
+	                    <h1 class="d-flex flex-row">
+	                        <field name="name"  placeholder="Visa Type" required="True" style="font-size: min(4vw, 2.6rem);"/>
+	                    </h1>
+	                </div>
+					<group>
+						<group>
+							<field name="description" string="Description"/>
+							<field name="category" string="Category" widget="radio"/> 
+							<field name="minimun_age" string="Minimun Age"/>
+						</group>
+
+                    
+						<group>
+							<field name="maximum_stay" string="Maximum Stay" placeholder="In Days"/>
+							<field name="renewable" string="Renewable"/>
+							<field name="visa_onditions" string="Conditions" widget="ace"/> 
+							<h3>
+
+								<span>Visa Fees <field name="fees" string="Visa Fees"/></span>
+							</h3>
+						</group>
+
+		              	<!-- <notebook>
+		                    <page string="Client">
+		                    	<field name="detail_ids" widget="section_and_note_one2many" mode="tree,kanban" on_change="1"> 
+		                    		<tree editable="bottom">
+										<field name="fname"/>
+										<field name="lname" attrs="{'required': [('confirm', '==', False)]}"/>
+										<field name="dob"/>
+										<field name="age"/>
+										<field name="gender"/>
+										<field name="married_status"/>
+										<field name="country"/>
+										<field name="confirm"/>
+									</tree>
+		                    	</field>
+		                    </page>
+		                </notebook> -->
+		            </group>
+				</sheet>
+			</form>
+
+		</field>
+	</record>
+
+	<record id="visa_type_tree" model="ir.ui.view">
+		<field name="name">visa.type.tree</field>
+		<field name="model">visa.type</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name" string="Visa Type"/>
+				<field name="category" string="Category" widget="radio" optional="hide"/> 
+				<field name="minimun_age" string="Minimun Age"/>
+				<field name="maximum_stay" string="Maximum Stay" placeholder="In Days"/>
+				<field name="fees" string="Visa Fees"/>
+				<field name="renewable" string="Renewable" optional="hide"/>
+			</tree>
+		</field>
+	</record>
+
+	<!-- visa document form -->
+
+
+	<record id="visa_document_tree" model="ir.ui.view">
+		<field name="name">visa.document.form</field>
+		<field name="model">visa.document</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="document_name" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="visa_type_action" model="ir.actions.act_window">
+		<field name="name">Visa Type</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">visa.type</field>
+		<field name="view_mode">tree,kanban,form</field>
+		<field name="help" type="html">
+			<p> It is working ok.</p>
+		</field>
+	</record> 
+
+	<record id="visa_document_action" model="ir.actions.act_window">
+		<field name="name">Documents</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">visa.document</field>
+		<field name="view_mode">tree,kanban,form</field>
+		<field name="help" type="html">
+			<p> It is working ok.</p>
+		</field>
+	</record> 
+
+	<menuitem 	id="visa_type_root"
+			name="Type"
+			parent="visa_root"
+			sequence="10"/>
+
+	<menuitem 	id="visa_Type_root"
+			name="Visa Type"
+			parent="visa_type_root"
+			action="visa_type_action"
+			sequence="10"/>
+
+	<menuitem 	id="visa_document_root"
+			name="Documents"
+			parent="visa_type_root"
+			action="visa_document_action"
+			sequence="10"/>
+
+</odoo>

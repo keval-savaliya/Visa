@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <template id="pdf_report_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="property">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>
+                                <span t-field="property.name"/>
+                            </h2>
+                            <table class="table" style="border:2px solid black;">
+                                <thead tyle="display: table-row-group">
+                                    <tr>
+                                        <th>First name</th>
+                                        <th>Last name</th>
+                                        <th>Date of birth</th>
+                                        <th>Age</th>
+                                        <th>Country</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <t t-set="detail" t-value="property.mapped('detail_ids')"/>
+                                        <t t-foreach="detail" t-as="d" >
+                                            <tr>
+                                                <td ><span t-field="d.fname"/></td> 
+                                                <td ><span t-field="d.lname"/></td> 
+                                                <td ><span t-field="d.dob"/></td> 
+                                                <td ><span t-field="d.age"/></td> 
+                                                <td ><span t-field="d.country"/></td>
+                                            </tr>
+                                        </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+        <record id="pdf_report_id_1" model="ir.actions.report">
+            <field name="name">Pdf Report</field>
+            <field name="model">visa.type</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">Visa.pdf_report_id</field>
+            <field name="report_file">Visa.pdf_report_id</field>
+            <field name="binding_model_id" ref="model_visa_type"/>
+            <field name="binding_type">report</field>
+       </record>
+
+    </data>
+</odoo> 
+
+

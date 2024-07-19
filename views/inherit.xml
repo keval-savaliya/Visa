@@ -1,0 +1,142 @@
+<odoo>
+	<record id="visa_inherit_form" model="ir.ui.view">
+		<field name="name">visa.inherit.form</field>
+		<field name="model">parent.model</field>
+		<field name="arch" type="xml">
+			<form>
+				<!-- <header>
+    				<button name="inherit_action" string="inherit" class="oe_highlight" type="object"/>
+  				</header> -->
+				<sheet>
+					<group>
+						<group>
+							<field name="parent" />
+							<field name="is_rich"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+
+	<record model="ir.ui.view" id="inherited_model_view_form">
+		<field name="name">inherited.model.form.inherit.test</field>
+		<field name="model">parent.model</field>
+		<field name='inherit_id' ref='Visa.visa_inherit_form' />
+		<field name="arch" type="xml">
+
+			<!-- attributes -->
+		    <!-- <xpath expr="//field[@name='parent']" position='attributes'>
+       			<attribute name="readonly">1</attribute>
+       			<attribute name="invisible">1</attribute>
+		    </xpath> -->
+
+		    <!-- after,befor,replace -->
+
+		    <xpath expr="//field[@name='parent']" position='after'>
+       			<field name="child"/>
+       			<field name="ty"/>
+		    </xpath>
+
+
+		    <!-- inside -->
+		   <!--  <xpath expr="." position='inside'>
+		    	<form>
+		    		<sheet>
+		    			<group>
+		    				<group>
+		    					<field name="child" string="child(position='inside')"/>
+		    					
+		    				</group>
+		    			</group>
+		    			<notebook>
+			    			<page string="Intro">
+				    			<field name="child_intro"/>
+			    			</page>
+		    			</notebook>
+		    		</sheet>
+		    	</form>
+		    </xpath> -->
+
+		</field>
+	</record>
+
+
+<!-- task add field in inharite view fild -->
+	<record model="ir.ui.view" id="inherited_task_model_view_form">
+		<field name="name">inherited.task.model.form.inherit.test</field>
+		<field name="model">sale.order</field>
+		<field name='inherit_id' ref='l10n_in_sale.view_order_form_inherit_l10n_in_sale' />
+		<field name="arch" type="xml">
+		    <xpath expr="//field[@name='l10n_in_gst_treatment']" position='after'>
+		        <field name="task"/>
+		    </xpath>
+		</field>
+	</record>
+
+<!-- 	<record model="ir.ui.view" id="inherited_task_model_view_form">
+		<field name="name">inherited.task.model.form.inherit.test</field>
+		<field name="model">sale.order</field>
+		<field name='inherit_id' ref='sale.view_order_form' />
+		<field name="arch" type="xml">
+		  	<xpath expr="//page[@name='customer_signature']/group/field[@name='signed_by']" position="after">
+                    <field name="task" />
+            </xpath>
+		</field>
+	</record>  -->
+
+
+	<record id="visa_inherit_tree" model="ir.ui.view">
+		<field name="name">visa.inherit.tree</field>
+		<field name="model">parent.model</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="parent" />
+				<field name="child"	/>
+				<field name="is_rich"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="visa_inherit_search" model="ir.ui.view">
+		<field name="name">visa.inherit.search</field>
+		<field name="model">parent.model</field>
+		<field name="arch" type="xml">
+			<search>
+				<group expand="0" name="Group By">
+
+					<filter
+						name="group_by_rich"
+						string="rich"
+						context="{'group_by':'is_rich'}"
+						/>
+
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<record id="visa_inherit_action" model="ir.actions.act_window">
+		<field name="name">Inherit</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">parent.model</field>
+		<field name="view_mode">tree,kanban,form</field>
+		<field name="context">{'default_is_rich':False , 'search_default_group_by_rich':1}</field>
+		<field name="help" type="html">
+			<p> It is working ok.</p>
+		</field>
+	</record> 
+
+	<menuitem 	id="visa_inheritance_root"
+			name="Inheritance"
+			parent="visa_root"
+			sequence="12"/>
+
+	<menuitem 	id="visa_inherit_root"
+			name="Inherit"
+			parent="visa_inheritance_root"
+			action="visa_inherit_action"
+			sequence="12"/>
+
+</odoo>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.visa.client</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <div class="app_settings_block" data-string="Visa" id="visa" string="Visa" data-key="Visa">
+                    <h2>Visa Management</h2>
+                     <div class="row mt16 o_settings_container" id="visa_setting">
+                         <div class="col-12 col-lg-6 o_setting_box" id="visa_send_email">
+                            <div class="o_setting_left_pane">
+                                <field name="send_email"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="send_email" string="Send an Email"/>
+                                <div class="text-muted">
+                                	Send an Email to client
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+
+	<record id="visa_setting_action" model="ir.actions.act_window">
+		<field name="name">Visa Settings</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">res.config.settings</field>
+		<field name="view_mode">form</field>
+		<field name="target">inline</field>
+		<field name="context">{'module':'Visa','bin_size':'False'}</field>
+	</record> 
+
+
+	<menuitem 	id="visa_configuration_root"
+			name="Configuration"
+			parent="visa_root"
+			sequence="15"/>
+
+	<menuitem 	id="visa_setting_root"
+			name="Settings"
+			parent="visa_configuration_root"
+			action="visa_setting_action"
+			sequence="15"/>
+
+</odoo>

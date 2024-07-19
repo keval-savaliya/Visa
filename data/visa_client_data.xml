@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+
+      <!-- we can create pre define record. when we install module this record will automaticaly create. -->
+
+      <record id="vc1" model="visa.client">
+         <field name="company_id">1</field>  
+         <field name="fname">data1</field>
+         <field name="lname">lname</field>
+         <field name="height">7.2</field>  
+         <field name="email">fnfnkfnknr@example.com</field>
+      </record>
+
+   </data>
+</odoo>

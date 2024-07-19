@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="email_template_visa" model="mail.template">
+        <field name="name">Visa Mail</field>
+        <field name="model_id" ref="model_your_model_name"/> <!-- Replace with your actual model reference -->
+        <field name="email_from">your_email@example.com</field> <!-- Replace with a valid email address -->
+        <field name="email_to">${object.email}</field> <!-- Make sure 'email' is a valid field on your model -->
+        <field name="subject">Testing Email</field>
+<!--        <field name="report_template" ref="pdf_report_id_2"/> &lt;!&ndash; Replace with your actual report template reference &ndash;&gt;-->
+<!--        <field name="report_name">${object.fname}</field> &lt;!&ndash; Make sure 'fname' is a valid field on your model &ndash;&gt;-->
+        <field name="body_html" type="html">
+            <![CDATA[
+            <div>
+                <p>Hello, <span style="font-size: 1.5em;">${object.fname}</span></p>
+                <p>Good Morning</p>
+                <p>In a bustling city, a young artist painted vibrant murals on crumbling walls, infusing forgotten corners with life. Each stroke told stories of hope, resilience, and dreams, inspiring passersby to see beauty in decay.</p>
+                <p>Regards, <span>${object.fname}</span></p>
+            </div>
+            ]]>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="pdf_report_client">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="x">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div>
+                                <header>
+                                    <span t-field="x.client_seq" style="font-size: 30px; font-weight: bold; display: block; text-align: center;"></span>
+                                </header>
+                            </div>
+                            <div class="inner_div" style="display:inline-block; width:100%">
+                                <div class="div-1" style="width:45%; display:inline-block;">
+                                    <p>First Name: <span t-field="x.fname"/></p>
+                                    <p>Type: <span t-field="x.name_id"/></p>
+                                    <p>Date of Birth: <span t-field="x.dob"/></p>
+                                    <p>Gender: <span t-field="x.gender"/></p>
+                                    <p>Height: <span t-field="x.height"/></p>
+                                    <p>Mobile: <span t-field="x.mobile"/></p>
+                                    <p>E-mail: <span t-field="x.email"/></p>
+                                </div>
+                                <div class="div-2" style="width:45%; display:inline-block; float: right">
+                                    <p>Creation Date: <span t-field="x.date_action"/></p>
+                                    <p>Married Status: <span t-field="x.married_status"/></p>
+                                    <p>Country: <span t-field="x.country"/></p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="pdf_report_id_2" model="ir.actions.report">
+            <field name="name">Client Pdf Report</field>
+            <field name="model">visa.client</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">Visa.pdf_report_client</field>
+            <field name="report_file">Visa.pdf_report_client</field>
+            <field name="binding_model_id" ref="model_visa_client"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

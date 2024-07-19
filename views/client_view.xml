@@ -1,0 +1,507 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+
+<odoo>
+
+    <!-- Server Action First for Update, Second for Wizard -->
+
+    <record id="action_confirm" model="ir.actions.server">
+        <field name="name">Confirm</field>
+        <field name="model_id" ref="model_visa_client"/>
+        <field name="binding_model_id" ref="model_visa_client"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">records.action_confirm()</field>
+    </record>
+
+    <record id="action_wizard" model="ir.actions.server">
+        <field name="name">Create Appointment</field>
+        <field name="model_id" ref="model_visa_client"/>
+        <field name="binding_model_id" ref="model_visa_client"/>
+        <field name="binding_view_types">form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records.ensure_one():
+            action = env.ref('Visa.appointment_wizard_action').sudo().with_context(env.context).read()[0]
+        </field>
+    </record>
+
+    <record id="view_selcted_report" model="ir.actions.server">
+        <field name="name">View Selected Report</field>
+        <field name="model_id" ref="model_visa_client"/>
+        <field name="binding_model_id" ref="model_visa_client"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = env.ref('Visa.selected_view_wizard_action').read()[0]
+        </field>
+    </record>
+
+    <record id="view_selcted_project" model="ir.actions.server">
+        <field name="name">View Project</field>
+        <field name="model_id" ref="model_visa_client"/>
+        <field name="binding_model_id" ref="model_visa_client"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records.ensure_one():
+            action = env.ref('Visa.selected_view_project_wizard_action').read()[0]
+        </field>
+    </record>
+
+    <!-- Schedule Action-->
+
+    <record id="birthday_action" model="ir.cron">
+        <field name="name">Birthday Reminder</field>
+        <field name="active" eval="True"/>
+        <field name="priority">10</field>
+        <field name="interval_type">days</field>
+        <field name="interval_number">1</field>
+        <field name="numbercall">-1</field>
+        <field name="nextcall" eval="datetime.today() + timedelta(days=1)"/>
+        <field name="model_id" ref="model_visa_client"/>
+        <field name="state">code</field>
+        <field name="code">model.birthday_reminder()</field>
+    </record>
+
+
+    <!-- Form View -->
+
+    <record id="client_view_form" model='ir.ui.view'>
+        <field name="name">visa.client.form</field>
+        <field name="model">visa.client</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable':'1','fold_field':'fold'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_send_email" string="Send Email" class="oe_stat_button" type="object"
+                                icon="fa-envelope-o"/>
+                        <button name="%(appointment_wizard_action)d" string="Appointment" class="oe_stat_button"
+                                type="action" icon="fa-calendar-plus-o"/>
+                        <button name="%(excel_wizard_action)d" string="Create Excel" class="oe_stat_button"
+                                type="action" icon="fa-file-excel-o"/>
+                        <button name="confirm_action" string="Visa Types" class="oe_stat_button" type="object"
+                                icon="fa-check-circle-o"/>
+                        <!-- <button name="birthday_reminder" string="Birthday" class="oe_stat_button" type="object" icon="fa-birthday-cake"/> -->
+                    </div>
+                    <div>
+                        <field name="image" widget="image" class="oe_avatar m-0"/>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1 class="d-flex flex-row">
+                            <field name="fname" placeholder="Client's Name" required="True"
+                                   style="font-size: min(4vw, 2.6rem);"/>
+                        </h1>
+                        <h2>
+                            <field name="name_id" placeholder="Visa Type"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <!-- <field name="lname" placeholder="Last name" /> -->
+                            <field name="id_user"/>
+                            <field name="dob" placeholder="Date of Birth"/>
+                            <field name="age" placeholder="Age"/> <!--widget="progressbar"-->
+                            <field name="gender" widget="radio"/>
+                            <field name="height"/>
+                            <field name="mobile" placeholder="Mobile number" widget="phone"/>
+                            <field name="email" placeholder="Enter E-mail" widget="email"/>
+                            <field name="email_from" placeholder="Enter E-mail" widget="email"/>
+                            <!-- <field name="company_id"/> -->
+                            <!-- <field name="address_id" context="{'show_address':1}" options="{'always_reload':True}"/> -->
+                            <!-- <field name="email_from" placeholder="Enter E-mail"/> -->
+                        </group>
+                        <group>
+                            <field name="date_action"/>
+                            <field name="add1" placeholder="Residential Address"/>
+                            <field name="add2" placeholder="Work Address"/>
+                            <field name="married_status" widget="radio"/>
+                            <field name="country"/>
+                            <field name="reason"/>
+                            <field name="confirm" placeholder="Confirm" invisible="1"/>
+                            <field name="reference_appiontment" invisible="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Family Members">
+                                <field name="family" widget="section_and_note_one2many" mode="tree,kanban"
+                                       on_change="1">
+                                    <tree editable="bottom">
+                                        <field name="fm_name"/>
+                                        <field name="relation"/>
+                                        <field name="fage"/>
+                                        <field name="occupation"/>
+                                        <field name="income" widget="monetary" sum="Total Income"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="document_ids">
+                                    <tree editable="bottom">
+                                        <field name="document_name"/>
+                                        <field name="doc"/>
+                                        <field name="verify"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="About">
+                                <field name="html" placeholder="write your html"/>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- tree view -->
+
+    <record id="client_view_tree" model='ir.ui.view'>
+        <field name="name">visa.client.tree</field>
+        <field name="model">visa.client</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'confirm'"
+                  decoration-info="state == 'done'"
+                  decoration-danger="state == 'cancel'"
+                  decoration-warning="state == 'draft'" export_xlsx="1">
+
+                <field name="client_seq" widget="handle"/>
+                <field name="image" widget="image" colspan="2" optional="hide"/>
+                <field name="id_user"/>
+                <field name="fname" optional="show"/>
+                <field name="name_id" string="Visa Type"/>
+                <!-- <field name="lname" optional="hide"/> -->
+                <field name="dob" optional="show"/>
+                <field name="age" avg="total age" optional="hide"/> <!--You can use sum="xyz" -->
+                <field name="gender"/>
+                <field name="married_status"/>
+                <field name="height" optional="hide"/>
+                <field name="mobile" widget="phone" optional="hide"/>
+                <field name="email" widget="email" optional="hide"/>
+                <field name="country"/>
+                <field name="date_action"/>
+                <field name="document_ids" widget="many2many_tags"/>
+                <field name="activity_ids" widget="list_activity" optional="hide"/>
+                <field name="state"
+                       decoration-success="state == 'confirm'"
+                       decoration-info="state == 'done'"
+                       decoration-danger="state == 'cancel'"
+                       decoration-warning="state == 'draft'"
+                       widget="badge"/>
+                <!-- <field name="confirm"/> -->
+
+            </tree>
+        </field>
+    </record>
+
+    <!-- kanban view -->
+
+    <record id="client_view_kanban" model="ir.ui.view">
+        <field name="name">visa.client.kanban</field>
+        <field name="model">visa.client</field>
+        <field name="arch" type="xml">
+            <!-- <field name="email"/>
+            <field name="mobile"/> -->
+            <kanban>
+                <tamplate>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div style="width:100px;height:100px;display:inline-block;padding-right:5px;vertical-align: top;">
+                                <field name="image" widget="image"/>
+                            </div>
+                            <div style="display:inline-block">
+                                <h3>
+                                    <field name="fname"/>
+                                </h3>
+                                <div>
+                                    Name:
+                                    <field name="fname"/>
+                                    <br></br>
+                                    Visa Type:
+                                    <field name="name_id"/>
+                                    <br></br>
+                                    Age:
+                                    <field name="age"/>
+                                    <br></br>
+                                    E-mail:
+                                    <field name="email"/>
+                                    <br></br>
+                                    Phone:
+                                    <field name="mobile"/>
+                                    <br></br>
+                                </div>
+                            </div>  <!--style="margin-left:10px;margin-top:30px;"-->
+                        </div>
+                    </t>
+                </tamplate>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- graph view -->
+
+    <record id="client_view_graph" model="ir.ui.view">
+        <field name="name">visa.client.graph</field>
+        <field name="model">visa.client</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="graph"
+                   type="bar">                                <!--type = default='bar' 'line' 'pie' donut, area, smatter, radar -->
+                <field name="name_id" type="row"/>
+                <field name="fname" operator="*"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- pivot view -->
+
+    <record id="client_view_pivot" model="ir.ui.view">
+        <field name="name">visa.client.pivot</field>
+        <field name="model">visa.client</field>
+        <field name="arch" type="xml">
+            <pivot string="pivot">
+                <field name='fname' type='row'/>
+                <field name='height' type='column'/>
+                <!-- <field name='fname' type='row'/> -->
+                <field name='name_id' type='row'/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <!-- gantt view -->
+
+    <record id="view_task_gantt" model="ir.ui.view">
+        <field name="name">view.client.gantt</field>
+        <field name="model">visa.client</field>
+        <field name="arch" type="xml">
+            <gantt
+                    date_start="start_date"
+                    date_stop="stop_date"
+                    default_group_by="name_id"
+                    default_scale="week"
+                    color="name_id"
+                    scales="day,week,month,year"
+                    precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}"
+                    thumbnails="{'name_id': 'image_128'}">
+                <field name="name_id"/>
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <ul class="pl-1 mb-0">
+                                    <li>
+                                        <strong>Start Date:</strong>
+                                        <t t-esc="userTimezoneStartDate.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                    </li>
+                                    <li>
+                                        <strong>Stop Date:</strong>
+                                        <t t-esc="date_to.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>
+            </gantt>
+        </field>
+    </record>
+
+    <!-- servant -->
+
+    <record id="servant_view_form" model='ir.ui.view'>
+        <field name="name">visa.servant.form</field>
+        <field name="model">visa.servant</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="servant"/>
+                            <field name="fname"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Appointment  -->
+
+    <record id="appointment_view_form" model='ir.ui.view'>
+        <field name="name">visa.appointment.form</field>
+        <field name="model">visa.appointment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_url" string="Go to Google" class="oe_highlight" type="object"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="age"/>
+                            <field name="date"/>
+                            <field name="about"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- create -->
+
+    <record id="create_view_form" model='ir.ui.view'>
+        <field name="name">visa.create.form</field>
+        <field name="model">visa.create</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="create_name"/>
+                        </group>
+                        <notebook>
+                            <page string="Create">
+                                <field name="o2m_ids" widget="section_and_note_one2many" mode="tree,kanban"
+                                       on_change="1">
+                                    <tree editable="bottom">
+                                        <field name="fname"/>
+                                        <field name="lname"/>
+                                        <field name="dob"/>
+                                        <field name="age"/>
+                                        <field name="gender"/>
+                                        <field name="married_status"/>
+                                        <field name="country"/>
+                                        <field name="confirm"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="servant_view_tree" model='ir.ui.view'>
+        <field name="name">visa.servant.form</field>
+        <field name="model">visa.servant</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="servant"/>
+                <field name="fname"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="appointment_view_tree" model='ir.ui.view'>
+        <field name="name">visa.appointment.tree</field>
+        <field name="model">visa.appointment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="age"/>
+                <field name="date"/>
+                <field name="about"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="create_view_tree" model='ir.ui.view'>
+        <field name="name">visa.create.tree</field>
+        <field name="model">visa.create</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="create_name"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="visa_client_action" model="ir.actions.act_window">
+        <field name="name">Client</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">visa.client</field>
+        <field name="view_mode">gantt,tree,kanban,form,graph,pivot</field>
+        <field name="help" type="html">
+            <p>It is working ok</p>
+        </field>
+    </record>
+
+
+    <!--
+        <record id="visa_servant_action" model="ir.actions.act_window">
+            <field name="name">Servant</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">visa.servant</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="help" type="html">
+                <p> It is working ok.</p>
+            </field>
+        </record> -->
+
+
+    <record id="Appointment_action" model="ir.actions.act_window">
+        <field name="name">Appointment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">visa.appointment</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p>It is working ok.</p>
+        </field>
+    </record>
+
+    <!-- <record id="create_action" model="ir.actions.act_window">
+        <field name="name">Create</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">visa.create</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p> It is working ok.</p>
+        </field>
+    </record> -->
+
+
+    <menuitem id="visa_root"
+              name="Visa"
+              sequence="10"/>
+
+    <menuitem id="visa_type_client_root"
+              name="Home"
+              parent="visa_root"
+              sequence="0"/>
+
+    <menuitem id="visa_client_root"
+              name="Client"
+              parent="visa_type_client_root"
+              action="visa_client_action"
+              sequence="10"/>
+
+    <!-- <menuitem 	id="visa_servant_root"
+                name="Servant"
+                parent="visa_type_client_root"
+                action="visa_servant_action"
+                sequence="10"/>  -->
+
+    <menuitem id="Appointment_list"
+              name="Appointments"
+              parent="visa_type_client_root"
+              action="Appointment_action"
+              sequence="11"/>
+
+    <!-- <menuitem 	id="Create_list"
+                name="Create"
+                parent="visa_type_client_root"
+                action="create_action"
+                sequence="13"/>  -->
+
+</odoo>

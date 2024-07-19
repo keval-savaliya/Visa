@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+		<record id="appointment_wizard_form" model="ir.ui.view">
+			<field name="name">visa.wizard.form</field>
+			<field name="model">appointment.wizard</field>
+			<field name="arch" type="xml">
+				<form string="New Appointment">
+					<group>
+				        <field name="f1" />
+				        <field name="f2" />
+				        <field name="f3" />
+				        <field name="f4" />
+				    </group>
+				    
+				    <footer>
+					    <button string="Cancel" class="btn-secondary" special="cancel"/> 
+						<button name="action_done" string="Submit" type="object" class="btn-primary"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="appointment_wizard_action" model="ir.actions.act_window">
+            <field name="name">Appointment</field>
+            <field name="type">ir.actions.act_window</field>  
+            <field name="res_model">appointment.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="appointment_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+
+</odoo>

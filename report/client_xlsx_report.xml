@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- XLSX report configuration for visa.type model -->
+    <report
+        id="client_xlsx_report_1"
+        model="visa.type"
+        string="Client XLSX"
+        report_type="qweb-xlsx"
+        name="Visa.report_visatype_xlsx"
+        file="client_xlsx_report"
+    />
+
+    <!-- XLSX report configuration for excel.wizard model -->
+    <report
+        id="wizard_xlsx_report_1"
+        model="excel.wizard"
+        string="Wizard XLSX"
+        report_type="qweb-xlsx"
+        name="Visa.report_excel_wizard_xlsx"
+        file="wizard_xlsx_report"
+    />
+</odoo>

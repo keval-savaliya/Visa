@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+
+      <record id="seq_visa_client" model="ir.sequence">
+          <field name="name">Client Sequence</field>
+          <field name="code">visa.client</field>
+          <field name="prefix">C</field>
+          <field name="padding">5</field>
+          <field name="company_id" eval="False"/>
+      </record>
+
+   </data>
+</odoo>
